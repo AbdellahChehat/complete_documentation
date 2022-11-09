@@ -4,7 +4,8 @@ Jenkins is a free and open source automation server. It helps automate the parts
 
 --- 
 
-## How to create a new job on jenkins
+## How to create a new job on jenkins
+---
 
 - Step 1: Create new item (On the left you should see New item, select that.)
   
@@ -15,10 +16,12 @@ Jenkins is a free and open source automation server. It helps automate the parts
 ## How to SSH connect Between Github and Jenkins then deploy of an EC2 instance.
 
 #### Step 1: Generate a new key
+---
 
 - Generate a new ssh key in your localhost and name format eng130-abdellah-jenkins. Steps to gerating a key can be found here in my How to create SSH key README.
 
 #### Step 2: Copy Key into Github
+---
 
     - Open up the correct repo select Settings on that repo
     - Select `Deploy Keys` and select `Add deploy key`
@@ -28,6 +31,7 @@ Jenkins is a free and open source automation server. It helps automate the parts
   **Create a new Jenkins item for CI, Merge and Deploy into EC2 Instance  select Freestyle Project**
 
 #### Step 3: CI job on jenkins (test)
+---
 
 - Set up the following configurations:
   
@@ -75,6 +79,7 @@ Jenkins is a free and open source automation server. It helps automate the parts
 
 
 #### Step 4: Create Merge Job on jenkins
+---
 
 - General
 
@@ -122,6 +127,7 @@ Click Restrict where this project can be run, then set it as sparta-ubuntu-node
 
 
 #### Step 5: On AWS create an EC2 Instance for Deployment
+---
 
 - We will deploy our application on an EC2 instance.
 
@@ -151,6 +157,7 @@ or
 
 
 #### Step 6: Create a CD job to launch ec2 insatnce 
+---
 
 - General
 
