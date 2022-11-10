@@ -5,7 +5,6 @@ Jenkins is a free and open source automation server. It helps automate the parts
 --- 
 
 ## How to create a new job on jenkins
----
 
 - Step 1: Create new item (On the left you should see New item, select that.)
   
@@ -15,13 +14,15 @@ Jenkins is a free and open source automation server. It helps automate the parts
 
 ## How to SSH connect Between Github and Jenkins then deploy of an EC2 instance.
 
-#### Step 1: Generate a new key
 ---
+#### Step 1: Generate a new key
+
 
 - Generate a new ssh key in your localhost and name format eng130-abdellah-jenkins. Steps to gerating a key can be found here in my How to create SSH key README.
 
-#### Step 2: Copy Key into Github
 ---
+#### Step 2: Copy Key into Github
+
 
     - Open up the correct repo select Settings on that repo
     - Select `Deploy Keys` and select `Add deploy key`
@@ -30,8 +31,9 @@ Jenkins is a free and open source automation server. It helps automate the parts
 
   **Create a new Jenkins item for CI, Merge and Deploy into EC2 Instance  select Freestyle Project**
 
-#### Step 3: CI job on jenkins (test)
 ---
+#### Step 3: CI job on jenkins (test)
+
 
 - Set up the following configurations:
   
@@ -77,9 +79,9 @@ Jenkins is a free and open source automation server. It helps automate the parts
     - Insert the project name for the merge job
     - Ensure Trigger only if build is stable is selected
 
-
-#### Step 4: Create Merge Job on jenkins
 ---
+#### Step 4: Create Merge Job on jenkins
+
 
 - General
 
@@ -125,9 +127,9 @@ Click Restrict where this project can be run, then set it as sparta-ubuntu-node
 
 
 
-
-#### Step 5: On AWS create an EC2 Instance for Deployment
 ---
+#### Step 5: On AWS create an EC2 Instance for Deployment
+
 
 - We will deploy our application on an EC2 instance.
 
@@ -190,6 +192,7 @@ Select Add build step > Execute Shell
 
 In command, insert the following code:
 ```
+# `ubuntu@ec2-54-220-129-240.eu-west-1.compute.amazonaws.com` the ip is taken from the ec2 insatnce 
 rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@ec2-54-220-129-240.eu-west-1.compute.amazonaws.com:/home/ubuntu/
 ssh -A -o "StrictHostKeyChecking=no" ubuntu@ec2-54-220-129-240.eu-west-1.compute.amazonaws.com << EOF
 
@@ -203,5 +206,41 @@ npm install
 
 nohup node app.js > /dev/null 2>&1 &
 
+EOF
+```
+
+
+### Seed the Database to aws
+
+1. Select New Item from the Jenkins Dashboard
+2. Create a new Jenkins Job to seed the database, called name_seed_db
+3. Select `Freestyle project` and click OK
+4. Select `Discard old builds` and set the number of builds to keep to 3
+5. Select Restrict where this project can be run and select `sparta-ubuntu-node`
+6. Select `SSH Agent` and select Add and enter the private key for the eng130_jenkins_name key pair
+7. Select Add build step and select `Execute shell`
+8. Enter the following commands:
+
+```
+ssh -A -o "StrictHostKeyChecking=no" ubuntu@ << EOF
+sudo killall -9 node
+
+if ["$DB_HOST" = ""]
+then
+  export DB_HOST=mongodb://:27017/posts >> .bashrc
+  sudo source .bashrc
+  echo 'IN THE IF STATMENT'
+  
+  cd eng130-aws-node-app/
+  cd app/
+  npm install
+  nohup node app.js > /dev/null 2>&1 &
+else
+	echo 'IN THE ELSE STATMENT'
+	cd eng130-aws-node-app/
+  	cd app/
+  	npm install
+  	nohup node app.js > /dev/null 2>&1 &
+fi
 EOF
 ```
