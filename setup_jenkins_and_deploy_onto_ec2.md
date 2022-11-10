@@ -149,9 +149,7 @@ Click Restrict where this project can be run, then set it as sparta-ubuntu-node
   
 Review and Launch
 
-Select the existing DevOpsStudent key:pair option for SSH
-Ensure the public NACL allows SSH (22) with source jenkins_server_ip/32
-If the Jenkins server updates/reboots, the GitHub webhook, security group and NACL need to be modified
+
 
 
 or 
